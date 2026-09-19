@@ -13,6 +13,7 @@ from dataclasses import dataclass
 
 from . import options as opts
 from .model import Profile
+from .i18n import _
 
 
 @dataclass(frozen=True)
@@ -25,17 +26,17 @@ class ClientSpec:
 
 #: Порядок = приоритет выбора.
 CLIENTS: tuple[ClientSpec, ...] = (
-    ClientSpec("sdl-freerdp", "SDL3 (рекомендуется)"),
+    ClientSpec("sdl-freerdp", _("SDL3 (recommended)")),
     ClientSpec(
         "xfreerdp",
         "X11 / XWayland",
-        note="На Wayland идёт через XWayland: возможны мыло и неверный масштаб.",
+        note=_("Runs through XWayland on Wayland: expect blur and wrong scaling."),
     ),
     ClientSpec(
         "wlfreerdp",
-        "Wayland (устарел)",
+        _("Wayland (deprecated)"),
         deprecated=True,
-        note="Официально объявлен заброшенным и будет удалён из дистрибутивов.",
+        note=_("Officially unmaintained and being removed from distributions."),
     ),
 )
 
@@ -58,7 +59,7 @@ def default_client() -> tuple[ClientSpec, str] | None:
 def build_argv(profile: Profile, client_path: str, password: str | None = None) -> list[str]:
     """Полная командная строка. Пароль в неё НЕ попадает (передаётся через stdin)."""
     if not profile.host:
-        raise ValueError("не задан адрес хоста")
+        raise ValueError(_("host address is not set"))
 
     argv = [client_path, f"/v:{profile.address}"]
     if profile.username:
@@ -99,9 +100,9 @@ def clients_report() -> str:
     """Человекочитаемая сводка о найденных клиентах (для окна «О программе»)."""
     found = discover_clients()
     if not found:
-        return "Клиент FreeRDP не найден. Установите пакет freerdp."
+        return _("FreeRDP client not found. Install the freerdp package.")
     lines = []
     for spec, path in found:
-        mark = " (устарел)" if spec.deprecated else ""
+        mark = _(" (deprecated)") if spec.deprecated else ""
         lines.append(f"{spec.binary}{mark}: {path}")
     return "\n".join(lines)

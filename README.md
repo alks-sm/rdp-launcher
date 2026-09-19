@@ -1,5 +1,7 @@
 # RDP Launcher
 
+[![CI](https://github.com/alks-sm/rdp-launcher/actions/workflows/ci.yml/badge.svg)](https://github.com/alks-sm/rdp-launcher/actions/workflows/ci.yml)
+
 Минимальный интерфейс к **официальному клиенту FreeRDP**. Не рисует RDP сам,
 не линкуется с `libfreerdp` и не изобретает протокол — он собирает командную строку
 и запускает `sdl-freerdp` отдельным процессом.
@@ -10,8 +12,8 @@
 > natively on Wayland — as a separate process. Benefits: no XWayland blur, crash isolation,
 > no ABI coupling to FreeRDP, several sessions at once. Profiles, display/audio/drive
 > settings, GNOME keyring for passwords, `.rdp` import/export.
-> **Note:** the UI strings are currently Russian-only; localisation is the main missing piece
-> for wider use (patches welcome in `rdp_launcher/options.py` and `rdp_launcher/ui/`).
+> The interface is localised: English is the source language, Russian ships as a translation;
+> adding a language means one `.po` file and `tools/build-locales.sh`.
 > See [`docs/research.md`](docs/research.md) for the reasoning and the measurements behind it.
 
 ## Зачем именно так
@@ -103,12 +105,38 @@ Option(
 Всё остальное — форма, сборка `argv`, экспорт в `.rdp` — произойдёт само.
 Новый флаг будет проверен тестом на живом клиенте (см. ниже).
 
+## Локализация
+
+Исходный язык строк в коде — **английский** (msgid), переводы лежат в `po/`, компилируются
+в `locale/<lang>/LC_MESSAGES/rdp-launcher.mo`. Если каталог не собран, `_()` возвращает
+английский оригинал, поэтому приложение работает и без компиляции.
+
+```bash
+./tools/build-locales.sh            # шаблон + компиляция всех переводов
+./tools/build-locales.sh --update   # ещё и подтянуть новые строки в переводы
+LANGUAGE=ru python3 -m rdp_launcher # проверить конкретный язык
+```
+
+Сейчас есть: английский (исходный) и русский (`po/ru.po`).
+
+**Добавить язык** — это один файл:
+
+```bash
+cp po/rdp-launcher.pot po/de.po
+# заполнить msgstr (например, в Poedit или Lokalize) и убрать строку с "Language:"
+./tools/build-locales.sh
+```
+
 ## Тесты
 
 ```bash
-python3 tests/test_core.py    # 28 тестов логики, GTK не требуется
+python3 tests/test_core.py    # 31 тест логики, GTK не требуется
 python3 tests/smoke_gui.py    # сборка окна и диалога, имитация сохранения
+msgfmt --check po/ru.po       # проверка каталога переводов
 ```
+
+Всё это прогоняется автоматически в CI на Fedora 44 (`.github/workflows/ci.yml`),
+включая дымовой тест интерфейса под `xvfb-run`.
 
 Отдельно стоит упомянуть `test_every_registry_flag_is_accepted`: он **эмпирически** проверяет
 каждый флаг реестра на настоящем клиенте (клиент печатает «Unexpected keyword» на незнакомый

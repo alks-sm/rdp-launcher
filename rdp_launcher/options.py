@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any, Iterable
+from .i18n import _
 
 GROUP_SCREEN = "screen"
 GROUP_SOUND = "sound"
@@ -19,10 +20,10 @@ GROUP_ADVANCED = "advanced"
 
 #: Порядок групп в интерфейсе.
 GROUPS: tuple[tuple[str, str], ...] = (
-    (GROUP_SCREEN, "Экран"),
-    (GROUP_SOUND, "Звук"),
-    (GROUP_DRIVES, "Диски и файлы"),
-    (GROUP_ADVANCED, "Дополнительно"),
+    (GROUP_SCREEN, _("Display")),
+    (GROUP_SOUND, _("Sound")),
+    (GROUP_DRIVES, _("Drives and files")),
+    (GROUP_ADVANCED, _("Advanced")),
 )
 
 KIND_BOOL = "bool"
@@ -61,63 +62,63 @@ OPTIONS: tuple[Option, ...] = (
     # ------------------------------------------------------------------ экран
     Option(
         key="fullscreen",
-        label="Полный экран",
+        label=_("Full screen"),
         group=GROUP_SCREEN,
         default=False,
         cli_on=("+f",),
         rdp_on=(("screen mode id", "i:2"),),
         rdp_off=(("screen mode id", "i:1"),),
-        hint="Переключение на лету: Ctrl+Alt+Enter.",
+        hint=_("Toggle on the fly with Ctrl+Alt+Enter."),
     ),
     Option(
         key="dynamic_resolution",
-        label="Подстраивать разрешение под окно",
+        label=_("Fit resolution to window"),
         group=GROUP_SCREEN,
         default=True,
         cli_on=("+dynamic-resolution",),
         cli_off=("-dynamic-resolution",),
         rdp_on=(("dynamic resolution", "i:1"),),
         rdp_off=(("dynamic resolution", "i:0"),),
-        hint="Работает только вне полного экрана.",
+        hint=_("Only applies when not in full screen."),
     ),
     Option(
         key="size",
-        label="Размер окна",
+        label=_("Window size"),
         group=GROUP_SCREEN,
         kind=KIND_TEXT,
         default="1280x720",
         cli=("/size:{value}",),
-        hint="Формат ШxВ, например 1920x1080.",
+        hint=_("Format WxH, for example 1920x1080."),
     ),
     Option(
         key="multimon",
-        label="Использовать все мониторы",
+        label=_("Use all monitors"),
         group=GROUP_SCREEN,
         default=False,
         cli_on=("/multimon",),
         rdp_on=(("use multimon", "i:1"),),
         rdp_off=(("use multimon", "i:0"),),
-        hint="Несовместимо с «подстраивать разрешение» и полным экраном в один монитор.",
+        hint=_("Not compatible with “fit resolution to window” and single-monitor full screen."),
     ),
     # ------------------------------------------------------------------- звук
     Option(
         key="audio_mode",
-        label="Звук",
+        label=_("Sound"),
         group=GROUP_SOUND,
         kind=KIND_CHOICE,
         default="redirect",
         cli=("/audio-mode:{value}",),
         rdp=(("audiomode", "i:{rdp_value}"),),
         choices=(
-            ("redirect", "Воспроизводить здесь (redirect)"),
-            ("server", "Оставить на удалённой машине (server)"),
-            ("none", "Отключить (none)"),
+            ("redirect", _("Play on this computer (redirect)")),
+            ("server", _("Leave on the remote machine (server)")),
+            ("none", _("Disable (none)")),
         ),
-        hint="«Здесь» требует рабочего звукового сервера (PipeWire/PulseAudio).",
+        hint=_("“This computer” requires a working sound server (PipeWire/PulseAudio)."),
     ),
     Option(
         key="microphone",
-        label="Передавать микрофон",
+        label=_("Forward microphone"),
         group=GROUP_SOUND,
         default=False,
         cli_on=("/microphone:sys:pulse",),
@@ -126,34 +127,33 @@ OPTIONS: tuple[Option, ...] = (
     ),
     Option(
         key="sound_latency",
-        label="Буферизация звука, мс",
+        label=_("Audio buffer, ms"),
         group=GROUP_SOUND,
         kind=KIND_INT,
         default=0,
         # Отдельного флага нет: под-опция /sound (см. _audio_arguments).
-        hint="0 — как в клиенте. Меньше значение — меньше отставание звука от картинки, "
-        "но при слишком малом появляются щелчки.",
+        hint=_("0 means the client default. Lower values reduce audio lag behind video; too low causes crackling."),
     ),
     Option(
         key="audio_quality",
-        label="Качество звука",
+        label=_("Audio quality"),
         group=GROUP_SOUND,
         kind=KIND_CHOICE,
         default="",
         unset="",
         # Отдельного флага нет: качество — под-опция /sound (см. _audio_arguments).
         choices=(
-            ("", "По умолчанию"),
-            ("dynamic", "Динамическое"),
-            ("medium", "Среднее"),
-            ("high", "Высокое"),
+            ("", _("Default")),
+            ("dynamic", _("Dynamic")),
+            ("medium", _("Medium")),
+            ("high", _("High")),
         ),
-        hint="Применяется только при выводе звука здесь.",
+        hint=_("Only applies when audio plays on this computer."),
     ),
     # ---------------------------------------------------------- диски и файлы
     Option(
         key="clipboard",
-        label="Общий буфер обмена",
+        label=_("Shared clipboard"),
         group=GROUP_DRIVES,
         default=True,
         cli_on=("+clipboard",),
@@ -163,15 +163,15 @@ OPTIONS: tuple[Option, ...] = (
     ),
     Option(
         key="drives",
-        label="Сетевые диски",
+        label=_("Network drives"),
         group=GROUP_DRIVES,
         kind=KIND_DRIVES,
         default=(),
-        hint="Каталог Linux появится как диск в Windows.",
+        hint=_("A Linux directory appears as a drive in Windows."),
     ),
     Option(
         key="printer",
-        label="Пробрасывать принтеры",
+        label=_("Forward printers"),
         group=GROUP_DRIVES,
         default=False,
         cli_on=("/printer",),
@@ -181,77 +181,77 @@ OPTIONS: tuple[Option, ...] = (
     # ----------------------------------------------------------- дополнительно
     Option(
         key="cert",
-        label="Проверка сертификата",
+        label=_("Certificate check"),
         group=GROUP_ADVANCED,
         kind=KIND_CHOICE,
         default="tofu",
         cli=("/cert:{value}",),
         choices=(
-            ("tofu", "Запомнить при первом подключении (рекомендуется)"),
-            ("deny", "Отклонять неизвестные"),
-            ("ignore", "Не проверять (небезопасно)"),
+            ("tofu", _("Remember on first connection (recommended)")),
+            ("deny", _("Reject unknown")),
+            ("ignore", _("Do not verify (insecure)")),
         ),
-        hint="«Не проверять» отключает защиту от MITM.",
+        hint=_("“Do not verify” disables protection against MITM."),
     ),
     Option(
         key="network",
-        label="Профиль сети",
+        label=_("Network profile"),
         group=GROUP_ADVANCED,
         kind=KIND_CHOICE,
         default="auto",
         cli=("/network:{value}",),
         choices=(
-            ("auto", "Автоматически"),
-            ("lan", "Локальная сеть"),
+            ("auto", _("Automatic")),
+            ("lan", _("Local network")),
             ("wan", "WAN"),
-            ("broadband-high", "Широкополосный (высокий)"),
-            ("broadband-low", "Широкополосный (низкий)"),
-            ("modem", "Модем"),
+            ("broadband-high", _("Broadband (high)")),
+            ("broadband-low", _("Broadband (low)")),
+            ("modem", _("Modem")),
         ),
     ),
     Option(
         key="gfx",
-        label="Графический конвейер (GFX)",
+        label=_("Graphics pipeline (GFX)"),
         group=GROUP_ADVANCED,
         kind=KIND_CHOICE,
         default="",
         unset="",
         cli=("/gfx:{value}",),
         choices=(
-            ("", "По умолчанию"),
+            ("", _("Default")),
             ("RFX", "RemoteFX"),
             ("AVC444", "H.264 (AVC444)"),
         ),
-        hint="Если чёрное окно — выберите «Выключить» (баг FreeRDP 3.31.x).",
+        hint=_("If the window is black, enable “Turn GFX off” below (FreeRDP 3.31.x bug)."),
     ),
     Option(
         key="gfx_off",
-        label="Выключить GFX совсем",
+        label=_("Turn GFX off entirely"),
         group=GROUP_ADVANCED,
         default=False,
         cli_on=("-gfx",),
-        hint="Обход чёрного окна на FreeRDP 3.31.x (баг #13348).",
+        hint=_("Workaround for the black window on FreeRDP 3.31.x (bug #13348)."),
     ),
     Option(
         key="kbd_layout",
-        label="Раскладка клавиатуры",
+        label=_("Keyboard layout"),
         group=GROUP_ADVANCED,
         kind=KIND_CHOICE,
         default="",
         unset="",
         cli=("/kbd:layout:{value}",),
         choices=(
-            ("", "Как на сервере"),
-            ("0x00000409", "Английская (US)"),
-            ("0x00000419", "Русская"),
-            ("0x00000422", "Украинская"),
-            ("0x00000407", "Немецкая"),
-            ("0x0000040c", "Французская"),
+            ("", _("As on the server")),
+            ("0x00000409", _("English (US)")),
+            ("0x00000419", _("Russian")),
+            ("0x00000422", _("Ukrainian")),
+            ("0x00000407", _("German")),
+            ("0x0000040c", _("French")),
         ),
     ),
     Option(
         key="compression",
-        label="Сжатие",
+        label=_("Compression"),
         group=GROUP_ADVANCED,
         default=True,
         cli_on=("+compression",),
@@ -261,7 +261,7 @@ OPTIONS: tuple[Option, ...] = (
     ),
     Option(
         key="disable_wallpaper",
-        label="Отключить обои",
+        label=_("Disable wallpaper"),
         group=GROUP_ADVANCED,
         default=False,
         cli_on=("-wallpaper",),
@@ -270,7 +270,7 @@ OPTIONS: tuple[Option, ...] = (
     ),
     Option(
         key="disable_themes",
-        label="Отключить темы",
+        label=_("Disable themes"),
         group=GROUP_ADVANCED,
         default=False,
         cli_on=("-themes",),
@@ -279,7 +279,7 @@ OPTIONS: tuple[Option, ...] = (
     ),
     Option(
         key="disable_menu_anims",
-        label="Отключить анимацию меню",
+        label=_("Disable menu animations"),
         group=GROUP_ADVANCED,
         default=False,
         cli_on=("-menu-anims",),
@@ -288,7 +288,7 @@ OPTIONS: tuple[Option, ...] = (
     ),
     Option(
         key="disable_fonts",
-        label="Отключить сглаживание шрифтов",
+        label=_("Disable font smoothing"),
         group=GROUP_ADVANCED,
         default=False,
         cli_on=("-fonts",),
@@ -298,7 +298,7 @@ OPTIONS: tuple[Option, ...] = (
     ),
     Option(
         key="auto_reconnect",
-        label="Переподключаться при обрыве",
+        label=_("Reconnect on disconnect"),
         group=GROUP_ADVANCED,
         default=True,
         cli_on=("+auto-reconnect",),
@@ -306,7 +306,7 @@ OPTIONS: tuple[Option, ...] = (
     ),
     Option(
         key="auto_reconnect_retries",
-        label="Попыток переподключения",
+        label=_("Reconnect attempts"),
         group=GROUP_ADVANCED,
         kind=KIND_INT,
         default=20,
@@ -412,7 +412,7 @@ def rdp_values(values: dict[str, Any]) -> dict[str, str]:
     # «Размер окна» в .rdp раскладывается на два ключа.
     size = values.get("size") or ""
     if isinstance(size, str) and "x" in size:
-        width, _, height = size.partition("x")
+        width, _sep, height = size.partition("x")
         if width.strip().isdigit() and height.strip().isdigit():
             out["desktopwidth"] = f"i:{width.strip()}"
             out["desktopheight"] = f"i:{height.strip()}"

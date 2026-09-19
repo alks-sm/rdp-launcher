@@ -6,11 +6,12 @@ from __future__ import annotations
 
 from . import options as opts
 from .model import Profile, DEFAULT_PORT
+from .i18n import _
 
 _RDP_TO_OPTION: dict[str, str] = {}
 for _opt in opts.OPTIONS:
     for _pairs in (_opt.rdp_on, _opt.rdp_off, _opt.rdp):
-        for _key, _ in _pairs:
+        for _key, _rdp_value in _pairs:
             _RDP_TO_OPTION.setdefault(_key.lower(), _opt.key)
 
 def _strip_type(value: str) -> str:
@@ -35,7 +36,7 @@ for _opt in opts.OPTIONS:
 def to_rdp_text(profile: Profile) -> str:
     """Профиль -> текст .rdp."""
     lines = [
-        "; Создано RDP Launcher",
+        "; Created by RDP Launcher",
         f"full address:s:{profile.address}",
     ]
     if profile.username:
@@ -66,15 +67,15 @@ def parse_rdp_text(text: str) -> Profile:
         line = line.strip()
         if not line or line.startswith(("#", ";")):
             continue
-        key, _, value = line.partition(":")
+        key, _sep, value = line.partition(":")
         key = key.strip().lower()
         # значение тоже имеет префикс типа: s:, i:, b:
         raw[key] = value.strip()
 
     address = _strip_type(raw.get("full address") or raw.get("alternate full address") or "")
-    host, _, port = address.partition(":")
+    host, _sep, port = address.partition(":")
     profile = Profile(
-        name=raw.get("name", "") or "Импортированное подключение",
+        name=raw.get("name", "") or _("Imported connection"),
         host=host,
         port=int(port) if port.isdigit() else DEFAULT_PORT,
         username=_strip_type(raw.get("username", "")),

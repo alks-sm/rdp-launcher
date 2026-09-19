@@ -6,13 +6,14 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from . import options as opts
+from .i18n import _
 
 DEFAULT_PORT = 3389
 
 
 @dataclass
 class Profile:
-    name: str = "Новое подключение"
+    name: str = _("New connection")
     host: str = ""
     port: int = DEFAULT_PORT
     username: str = ""
@@ -60,7 +61,7 @@ class Profile:
         except (TypeError, ValueError):
             port = DEFAULT_PORT
         return cls(
-            name=str(data.get("name") or "Новое подключение"),
+            name=str(data.get("name") or _("New connection")),
             host=str(data.get("host") or ""),
             port=port,
             username=str(data.get("username") or ""),

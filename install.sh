@@ -29,9 +29,10 @@ python3 -c "import gi; gi.require_version('Secret','1'); from gi.repository impo
   || missing+=("libsecret (python3-gobject-base)")
 command -v sdl-freerdp >/dev/null || command -v xfreerdp >/dev/null \
   || missing+=("freerdp")
+command -v msgfmt >/dev/null || missing+=("gettext")
 if [ ${#missing[@]} -gt 0 ]; then
   echo "Не хватает: ${missing[*]}"
-  echo "Установите:  sudo dnf install freerdp python3-gobject gtk4 libadwaita libsecret"
+  echo "Установите:  sudo dnf install freerdp python3-gobject gtk4 libadwaita libsecret gettext"
   exit 1
 fi
 
@@ -50,6 +51,11 @@ command -v xdg-mime >/dev/null && xdg-mime default "$APP_ID.desktop" application
 command -v update-desktop-database >/dev/null && update-desktop-database "$DESKTOP_DIR" 2>/dev/null || true
 command -v update-mime-database >/dev/null && update-mime-database "${XDG_DATA_HOME:-$HOME/.local/share}/mime" 2>/dev/null || true
 command -v gtk4-update-icon-cache >/dev/null && gtk4-update-icon-cache -f -t "${XDG_DATA_HOME:-$HOME/.local/share}/icons/hicolor" 2>/dev/null || true
+
+# Переводы: компилируем po/*.po в locale/*/LC_MESSAGES/*.mo
+if [ -x "$HERE/tools/build-locales.sh" ]; then
+  "$HERE/tools/build-locales.sh" >/dev/null 2>&1 && echo "переводы собраны" || echo "предупреждение: не удалось собрать переводы"
+fi
 
 echo "Установлено:"
 echo "  ярлык:  $DESKTOP_DIR/$APP_ID.desktop"

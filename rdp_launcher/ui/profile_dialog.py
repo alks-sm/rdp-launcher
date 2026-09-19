@@ -16,6 +16,7 @@ from gi.repository import Adw, Gio, Gtk
 
 from .. import options as opts
 from ..model import Profile, DEFAULT_PORT
+from ..i18n import _
 
 
 class ProfileDialog(Adw.Dialog):
@@ -27,7 +28,7 @@ class ProfileDialog(Adw.Dialog):
         parent: Gtk.Widget | None = None,
     ) -> None:
         super().__init__()
-        self.set_title(profile.name or "Подключение")
+        self.set_title(profile.name or _("Connection"))
         self.set_content_width(560)
         self.set_content_height(720)
 
@@ -44,9 +45,9 @@ class ProfileDialog(Adw.Dialog):
             page.add(group)
 
         header = Adw.HeaderBar()
-        cancel = Gtk.Button(label="Отмена")
+        cancel = Gtk.Button(label=_("Cancel"))
         cancel.connect("clicked", lambda *_: self.close())
-        save = Gtk.Button(label="Сохранить")
+        save = Gtk.Button(label=_("Save"))
         save.add_css_class("suggested-action")
         save.connect("clicked", self._save)
         header.pack_start(cancel)
@@ -60,47 +61,47 @@ class ProfileDialog(Adw.Dialog):
     # ------------------------------------------------------------- построение
     def _basic_group(self, profile: Profile) -> Adw.PreferencesGroup:
         group = Adw.PreferencesGroup(
-            title="Основное",
-            description="Адрес и учётные данные. Пароль хранится в связке ключей GNOME.",
+            title=_("General"),
+            description=_("Address and credentials. The password is kept in the GNOME keyring."),
         )
 
-        self._name = Adw.EntryRow(title="Название")
+        self._name = Adw.EntryRow(title=_("Name"))
         self._name.set_text(profile.name)
         group.add(self._name)
 
-        self._host = Adw.EntryRow(title="Адрес (хост или IP)")
+        self._host = Adw.EntryRow(title=_("Address (host or IP)"))
         self._host.set_text(profile.host)
         group.add(self._host)
 
         self._port = Adw.SpinRow.new_with_range(1, 65535, 1)
-        self._port.set_title("Порт")
+        self._port.set_title(_("Port"))
         self._port.set_value(profile.port or DEFAULT_PORT)
         group.add(self._port)
 
-        self._username = Adw.EntryRow(title="Пользователь")
+        self._username = Adw.EntryRow(title=_("User name"))
         self._username.set_text(profile.username)
         group.add(self._username)
 
-        self._domain = Adw.EntryRow(title="Домен")
+        self._domain = Adw.EntryRow(title=_("Domain"))
         self._domain.set_text(profile.domain)
         group.add(self._domain)
 
-        self._password = Adw.PasswordEntryRow(title="Пароль")
+        self._password = Adw.PasswordEntryRow(title=_("Password"))
         self._password.set_show_apply_button(False)
         if self._has_stored_password:
-            self._password.set_tooltip_text("Пароль уже сохранён — оставьте поле пустым")
+            self._password.set_tooltip_text(_("A password is already saved — leave this field empty"))
         group.add(self._password)
 
         self._remember = Adw.SwitchRow(
-            title="Хранить пароль в связке ключей",
-            subtitle="Если выключено, пароль будет запрашивать сам клиент",
+            title=_("Keep the password in the keyring"),
+            subtitle=_("If disabled, the client asks for the password itself"),
         )
         self._remember.set_active(self._has_stored_password)
         group.add(self._remember)
 
         self._import_hint = Adw.ActionRow(
-            title="Подсказка",
-            subtitle="Оставьте пароль пустым, чтобы клиент спросил его при подключении.",
+            title=_("Hint"),
+            subtitle=_("Leave the password empty and the client will ask when connecting."),
         )
         self._import_hint.set_activatable(False)
         group.add(self._import_hint)
@@ -162,7 +163,7 @@ class ProfileDialog(Adw.Dialog):
     def _drives_expander(self, opt: opts.Option) -> Adw.ExpanderRow:
         expander = Adw.ExpanderRow(
             title=opt.label,
-            subtitle="Каталог Linux появится как диск в Windows",
+            subtitle=_("A Linux directory appears as a drive in Windows"),
         )
         rows: list[Adw.ExpanderRow] = []
 
@@ -180,7 +181,7 @@ class ProfileDialog(Adw.Dialog):
             rows.append(drive)
             expander.add_row(drive)
 
-        add_row = Adw.ButtonRow(title="Добавить диск")
+        add_row = Adw.ButtonRow(title=_("Add a drive"))
         add_row.connect("activated", lambda *_: add_drive())
         expander.add_row(add_row)
 
@@ -197,35 +198,35 @@ class ProfileDialog(Adw.Dialog):
         path: str,
         on_remove: Callable[[Adw.ExpanderRow], None] | None,
     ) -> Adw.ExpanderRow:
-        row = Adw.ExpanderRow(title=name or "share", subtitle=path or "папка не выбрана")
-        row._drive_name = Adw.EntryRow(title="Имя диска в Windows")
+        row = Adw.ExpanderRow(title=name or "share", subtitle=path or _("no folder selected"))
+        row._drive_name = Adw.EntryRow(title=_("Drive name in Windows"))
         row._drive_name.set_text(name)
-        row._drive_path = Adw.EntryRow(title="Каталог на этой машине")
+        row._drive_path = Adw.EntryRow(title=_("Folder on this machine"))
         row._drive_path.set_text(path)
 
         def refresh(*_args: Any) -> None:
             row.set_title(row._drive_name.get_text().strip() or "share")
-            row.set_subtitle(row._drive_path.get_text().strip() or "папка не выбрана")
+            row.set_subtitle(row._drive_path.get_text().strip() or _("no folder selected"))
 
         row._drive_name.connect("changed", refresh)
         row._drive_path.connect("changed", refresh)
         row.add_row(row._drive_name)
         row.add_row(row._drive_path)
 
-        choose = Adw.ButtonRow(title="Выбрать папку…")
+        choose = Adw.ButtonRow(title=_("Choose a folder…"))
         choose.connect("activated", lambda *_: self._choose_folder(row._drive_path))
         row.add_row(choose)
 
         if on_remove is not None:
             remove = Gtk.Button(icon_name="user-trash-symbolic", valign=Gtk.Align.CENTER)
             remove.add_css_class("flat")
-            remove.set_tooltip_text("Удалить диск")
+            remove.set_tooltip_text(_("Remove the drive"))
             remove.connect("clicked", lambda *_: on_remove(row))
             row.add_suffix(remove)
         return row
 
     def _choose_folder(self, target: Adw.EntryRow) -> None:
-        dialog = Gtk.FileDialog(title="Выберите каталог")
+        dialog = Gtk.FileDialog(title=_("Choose a folder"))
 
         def done(source: Gtk.FileDialog, result: Any) -> None:
             try:
@@ -240,7 +241,7 @@ class ProfileDialog(Adw.Dialog):
     # ---------------------------------------------------------------- сохранить
     def _save(self, *_args: Any) -> None:
         profile = self._profile
-        profile.name = self._name.get_text().strip() or "Подключение"
+        profile.name = self._name.get_text().strip() or _("Connection")
         profile.host = self._host.get_text().strip()
         profile.port = int(self._port.get_value())
         profile.username = self._username.get_text().strip()

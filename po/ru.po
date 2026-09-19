@@ -1,0 +1,383 @@
+# Русский перевод RDP Launcher.
+# Copyright (C) 2026 alks-sm
+# This file is distributed under the same license as the rdp-launcher package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: rdp-launcher 0.1.0\n"
+"Report-Msgid-Bugs-To: https://github.com/alks-sm/rdp-launcher/issues\n"
+"PO-Revision-Date: 2026-09-19 19:00+0000\n"
+"Last-Translator: alks-sm\n"
+"Language: ru\n"
+"Language-Team: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid " (deprecated)"
+msgstr " (устарел)"
+
+msgid "0 means the client default. Lower values reduce audio lag behind video; too low causes crackling."
+msgstr "0 — как в клиенте. Меньше значение — меньше отставание звука от картинки, но при слишком малом появляются щелчки."
+
+msgid "A Linux directory appears as a drive in Windows"
+msgstr "Каталог Linux появится как диск в Windows"
+
+msgid "A Linux directory appears as a drive in Windows."
+msgstr "Каталог Linux появится как диск в Windows."
+
+msgid "A minimal front-end for the official FreeRDP client.\nThe launcher does not render RDP itself: it starts sdl-freerdp as a separate process."
+msgstr "Минимальный интерфейс к официальному клиенту FreeRDP.\nЛаунчер не рисует RDP сам — он запускает sdl-freerdp отдельным процессом."
+
+msgid "A password is already saved — leave this field empty"
+msgstr "Пароль уже сохранён — оставьте поле пустым"
+
+msgid "About"
+msgstr "О программе"
+
+msgid "Add a drive"
+msgstr "Добавить диск"
+
+msgid "Address (host or IP)"
+msgstr "Адрес (хост или IP)"
+
+msgid "Address and credentials. The password is kept in the GNOME keyring."
+msgstr "Адрес и учётные данные. Пароль хранится в связке ключей GNOME."
+
+msgid "Advanced"
+msgstr "Дополнительно"
+
+msgid "As on the server"
+msgstr "Как на сервере"
+
+msgid "Audio buffer, ms"
+msgstr "Буферизация звука, мс"
+
+msgid "Audio quality"
+msgstr "Качество звука"
+
+msgid "Automatic"
+msgstr "Автоматически"
+
+msgid "Broadband (high)"
+msgstr "Широкополосный (высокий)"
+
+msgid "Broadband (low)"
+msgstr "Широкополосный (низкий)"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Certificate check"
+msgstr "Проверка сертификата"
+
+msgid "Choose a folder"
+msgstr "Выберите каталог"
+
+msgid "Choose a folder…"
+msgstr "Выбрать папку…"
+
+msgid "Compression"
+msgstr "Сжатие"
+
+msgid "Connect"
+msgstr "Подключиться"
+
+msgid "Connection"
+msgstr "Подключение"
+
+msgid "Connections"
+msgstr "Подключения"
+
+msgid "Could not read the file: {error}"
+msgstr "Не удалось прочитать файл: {error}"
+
+msgid "Create a connection"
+msgstr "Создать подключение"
+
+msgid "Create a profile and the launcher will start the official FreeRDP client."
+msgstr "Создайте профиль — лаунчер запустит официальный клиент FreeRDP."
+
+msgid "Default"
+msgstr "По умолчанию"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Delete this connection?"
+msgstr "Удалить подключение?"
+
+msgid "Disable (none)"
+msgstr "Отключить (none)"
+
+msgid "Disable font smoothing"
+msgstr "Отключить сглаживание шрифтов"
+
+msgid "Disable menu animations"
+msgstr "Отключить анимацию меню"
+
+msgid "Disable themes"
+msgstr "Отключить темы"
+
+msgid "Disable wallpaper"
+msgstr "Отключить обои"
+
+msgid "Display"
+msgstr "Экран"
+
+msgid "Do not verify (insecure)"
+msgstr "Не проверять (небезопасно)"
+
+msgid "Domain"
+msgstr "Домен"
+
+msgid "Drive name in Windows"
+msgstr "Имя диска в Windows"
+
+msgid "Drives and files"
+msgstr "Диски и файлы"
+
+msgid "Duplicate"
+msgstr "Дублировать"
+
+msgid "Dynamic"
+msgstr "Динамическое"
+
+msgid "Edit"
+msgstr "Изменить"
+
+msgid "English (US)"
+msgstr "Английская (US)"
+
+msgid "Export to .rdp"
+msgstr "Экспорт в .rdp"
+
+msgid "Failed to start {binary}: {error}"
+msgstr "Не удалось запустить {binary}: {error}"
+
+msgid "Fit resolution to window"
+msgstr "Подстраивать разрешение под окно"
+
+msgid "Folder on this machine"
+msgstr "Каталог на этой машине"
+
+msgid "Format WxH, for example 1920x1080."
+msgstr "Формат ШxВ, например 1920x1080."
+
+msgid "Forward microphone"
+msgstr "Передавать микрофон"
+
+msgid "Forward printers"
+msgstr "Пробрасывать принтеры"
+
+msgid "FreeRDP client not found"
+msgstr "Клиент FreeRDP не найден"
+
+msgid "FreeRDP client not found. Install the freerdp package."
+msgstr "Клиент FreeRDP не найден. Установите пакет freerdp."
+
+msgid "French"
+msgstr "Французская"
+
+msgid "Full screen"
+msgstr "Полный экран"
+
+msgid "General"
+msgstr "Основное"
+
+msgid "German"
+msgstr "Немецкая"
+
+msgid "Graphics pipeline (GFX)"
+msgstr "Графический конвейер (GFX)"
+
+msgid "High"
+msgstr "Высокое"
+
+msgid "Hint"
+msgstr "Подсказка"
+
+msgid "If disabled, the client asks for the password itself"
+msgstr "Если выключено, пароль будет запрашивать сам клиент"
+
+msgid "If the window is black, enable “Turn GFX off” below (FreeRDP 3.31.x bug)."
+msgstr "Если чёрное окно — выберите «Выключить» (баг FreeRDP 3.31.x)."
+
+msgid "Import .rdp"
+msgstr "Импорт .rdp"
+
+msgid "Import from .rdp…"
+msgstr "Импорт из .rdp…"
+
+msgid "Imported connection"
+msgstr "Импортированное подключение"
+
+msgid "Imported: {name}"
+msgstr "Импортировано: {name}"
+
+msgid "Keep the password in the keyring"
+msgstr "Хранить пароль в связке ключей"
+
+msgid "Keyboard layout"
+msgstr "Раскладка клавиатуры"
+
+msgid "Leave on the remote machine (server)"
+msgstr "Оставить на удалённой машине (server)"
+
+msgid "Leave the password empty and the client will ask when connecting."
+msgstr "Оставьте пароль пустым, чтобы клиент спросил его при подключении."
+
+msgid "Local network"
+msgstr "Локальная сеть"
+
+msgid "Medium"
+msgstr "Среднее"
+
+msgid "Modem"
+msgstr "Модем"
+
+msgid "Name"
+msgstr "Название"
+
+msgid "Network drives"
+msgstr "Сетевые диски"
+
+msgid "Network profile"
+msgstr "Профиль сети"
+
+msgid "New connection"
+msgstr "Новое подключение"
+
+msgid "No connections yet"
+msgstr "Пока нет подключений"
+
+msgid "Not compatible with “fit resolution to window” and single-monitor full screen."
+msgstr "Несовместимо с «подстраивать разрешение» и полным экраном в один монитор."
+
+msgid "Officially unmaintained and being removed from distributions."
+msgstr "Официально объявлен заброшенным и будет удалён из дистрибутивов."
+
+msgid "Only a deprecated client was found: {binary}. Install the freerdp package and use sdl-freerdp."
+msgstr "Найден только устаревший клиент {binary}. Установите пакет freerdp и используйте sdl-freerdp."
+
+msgid "Only applies when audio plays on this computer."
+msgstr "Применяется только при выводе звука здесь."
+
+msgid "Only applies when not in full screen."
+msgstr "Работает только вне полного экрана."
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Play on this computer (redirect)"
+msgstr "Воспроизводить здесь (redirect)"
+
+msgid "Port"
+msgstr "Порт"
+
+msgid "Profile “{name}” will be deleted together with its saved password."
+msgstr "Профиль «{name}» будет удалён вместе с сохранённым паролем."
+
+msgid "RDP files"
+msgstr "Файлы RDP"
+
+msgid "Reconnect attempts"
+msgstr "Попыток переподключения"
+
+msgid "Reconnect on disconnect"
+msgstr "Переподключаться при обрыве"
+
+msgid "Reject unknown"
+msgstr "Отклонять неизвестные"
+
+msgid "Remember on first connection (recommended)"
+msgstr "Запомнить при первом подключении (рекомендуется)"
+
+msgid "Remove the drive"
+msgstr "Удалить диск"
+
+msgid "Runs through XWayland on Wayland: expect blur and wrong scaling."
+msgstr "На Wayland идёт через XWayland: возможны мыло и неверный масштаб."
+
+msgid "Russian"
+msgstr "Русская"
+
+msgid "SDL3 (recommended)"
+msgstr "SDL3 (рекомендуется)"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Saved: {path}"
+msgstr "Сохранено: {path}"
+
+msgid "Session “{name}” finished (exit code {code})"
+msgstr "Сессия «{name}» завершена (код {code})"
+
+msgid "Shared clipboard"
+msgstr "Общий буфер обмена"
+
+msgid "Sound"
+msgstr "Звук"
+
+msgid "Started: {name} ({binary})"
+msgstr "Запущено: {name} ({binary})"
+
+msgid "Toggle on the fly with Ctrl+Alt+Enter."
+msgstr "Переключение на лету: Ctrl+Alt+Enter."
+
+msgid "Turn GFX off entirely"
+msgstr "Выключить GFX совсем"
+
+msgid "Ukrainian"
+msgstr "Украинская"
+
+msgid "Use all monitors"
+msgstr "Использовать все мониторы"
+
+msgid "User name"
+msgstr "Пользователь"
+
+msgid "Wayland (deprecated)"
+msgstr "Wayland (устарел)"
+
+msgid "Window size"
+msgstr "Размер окна"
+
+msgid "Workaround for the black window on FreeRDP 3.31.x (bug #13348)."
+msgstr "Обход чёрного окна на FreeRDP 3.31.x (баг #13348)."
+
+msgid "address not set"
+msgstr "адрес не задан"
+
+msgid "all monitors"
+msgstr "все мониторы"
+
+msgid "audio here"
+msgstr "звук здесь"
+
+msgid "audio on server"
+msgstr "звук на сервере"
+
+msgid "drives: {count}"
+msgstr "дисков: {count}"
+
+msgid "full screen"
+msgstr "полный экран"
+
+msgid "host address is not set"
+msgstr "не задан адрес хоста"
+
+msgid "no audio"
+msgstr "без звука"
+
+msgid "no folder selected"
+msgstr "папка не выбрана"
+
+msgid "“Do not verify” disables protection against MITM."
+msgstr "«Не проверять» отключает защиту от MITM."
+
+msgid "“This computer” requires a working sound server (PipeWire/PulseAudio)."
+msgstr "«Здесь» требует рабочего звукового сервера (PipeWire/PulseAudio)."
+
