@@ -72,3 +72,38 @@ jobs:
           GDK_BACKEND: x11
           GSK_RENDERER: cairo
         run: xvfb-run -a python3 tests/smoke_gui.py
+
+  rpm:
+    name: Сборка RPM (Fedora 44)
+    runs-on: ubuntu-latest
+    container: fedora:44
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Установить сборочные зависимости
+        run: |
+          dnf install -y --setopt=install_weak_deps=False \
+            rpm-build gettext desktop-file-utils tar gzip
+
+      - name: Собрать пакет
+        run: |
+          VERSION=$(sed -n 's/^version = "\(.*\)"/\1/p' pyproject.toml | head -1)
+          mkdir -p ~/rpmbuild/{SOURCES,SRPMS,RPMS,BUILD,BUILDROOT}
+          tar --transform "s,^\.,rdp-launcher-$VERSION," \
+              --exclude=.git --exclude=__pycache__ --exclude='*.pyc' \
+              -czf ~/rpmbuild/SOURCES/rdp-launcher-$VERSION.tar.gz .
+          rpmbuild -ba packaging/rdp-launcher.spec
+
+      - name: Содержимое пакета
+        run: |
+          rpm -qlp ~/rpmbuild/RPMS/noarch/rdp-launcher-*.noarch.rpm
+          echo "--- проверка обязательных файлов ---"
+          rpm -qlp ~/rpmbuild/RPMS/noarch/rdp-launcher-*.noarch.rpm > /tmp/files.txt
+          for f in /usr/bin/rdp-launcher \
+                   /usr/share/applications/io.github.rdplauncher.RdpLauncher.desktop \
+                   /usr/share/icons/hicolor/scalable/apps/io.github.rdplauncher.RdpLauncher.svg \
+                   /usr/share/metainfo/io.github.rdplauncher.RdpLauncher.metainfo.xml \
+                   /usr/share/rdp-launcher/locale/ru/LC_MESSAGES/rdp-launcher.mo; do
+            grep -qx "$f" /tmp/files.txt || { echo "::error::в пакете нет $f"; exit 1; }
+          done
+          echo "все ожидаемые файлы на месте"

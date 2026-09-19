@@ -15,9 +15,12 @@ cd "$HERE"
 DOMAIN="rdp-launcher"
 MODE="${1:-}"
 
-for tool in xgettext msgfmt; do
+for tool in msgfmt; do
   command -v "$tool" >/dev/null || { echo "нужен пакет gettext (нет $tool)"; exit 1; }
 done
+if [ "$MODE" != "--compile-only" ]; then
+  command -v xgettext >/dev/null || { echo "нужен пакет gettext (нет xgettext)"; exit 1; }
+fi
 
 VERSION="$(python3 -c 'import re,pathlib; m=re.search(r"^version = \"([^\"]+)\"", pathlib.Path("pyproject.toml").read_text(encoding="utf-8"), re.M); print(m.group(1) if m else "0.0.0")')"
 
