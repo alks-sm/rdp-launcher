@@ -10,6 +10,7 @@ URL:            https://github.com/alks-sm/rdp-launcher
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
+BuildRequires:  python3
 BuildRequires:  gettext
 BuildRequires:  desktop-file-utils
 

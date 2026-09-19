@@ -83,7 +83,7 @@ jobs:
       - name: Установить сборочные зависимости
         run: |
           dnf install -y --setopt=install_weak_deps=False \
-            rpm-build gettext desktop-file-utils tar gzip
+            python3 rpm-build gettext desktop-file-utils tar gzip
 
       - name: Собрать пакет
         run: |
