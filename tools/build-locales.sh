@@ -22,14 +22,17 @@ VERSION="$(python3 -c 'import re,pathlib; m=re.search(r"^version = \"([^\"]+)\""
 mkdir -p po locale
 
 # 1. Шаблон со всеми строками, помеченными _()
-find rdp_launcher -name '*.py' ! -name 'i18n.py' -print0 \
-  | xargs -0 xgettext \
-      --language=Python \
-      --keyword=_ \
-      --from-code=UTF-8 \
-      --package-name="$DOMAIN" \
-      --package-version="$VERSION" \
-      --output="po/$DOMAIN.pot"
+# Порядок файлов сортируем: xgettext сохраняет порядок входа, а find его не гарантирует —
+# без сортировки шаблон отличается от машины к машине.
+mapfile -t sources < <(find rdp_launcher -name '*.py' ! -name 'i18n.py' | LC_ALL=C sort)
+xgettext \
+  --language=Python \
+  --keyword=_ \
+  --from-code=UTF-8 \
+  --package-name="$DOMAIN" \
+  --package-version="$VERSION" \
+  --output="po/$DOMAIN.pot" \
+  "${sources[@]}"
 echo "шаблон обновлён: po/$DOMAIN.pot ($(grep -c '^msgid "' "po/$DOMAIN.pot") строк)"
 
 # 2. При --update подтянуть новые строки в переводы (старые сохраняются)

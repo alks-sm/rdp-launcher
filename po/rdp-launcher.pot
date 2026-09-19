@@ -17,250 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: rdp_launcher/ui/profile_dialog.py:31 rdp_launcher/ui/profile_dialog.py:244
-msgid "Connection"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:48 rdp_launcher/ui/window.py:213
-msgid "Cancel"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:50
-msgid "Save"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:64
-msgid "General"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:65
-msgid "Address and credentials. The password is kept in the GNOME keyring."
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:68
-msgid "Name"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:72
-msgid "Address (host or IP)"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:77
-msgid "Port"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:81
-msgid "User name"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:85
-msgid "Domain"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:89
-msgid "Password"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:92
-msgid "A password is already saved — leave this field empty"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:96
-msgid "Keep the password in the keyring"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:97
-msgid "If disabled, the client asks for the password itself"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:103
-msgid "Hint"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:104
-msgid "Leave the password empty and the client will ask when connecting."
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:166
-msgid "A Linux directory appears as a drive in Windows"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:184
-msgid "Add a drive"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:201 rdp_launcher/ui/profile_dialog.py:209
-msgid "no folder selected"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:202
-msgid "Drive name in Windows"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:204
-msgid "Folder on this machine"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:216
-msgid "Choose a folder…"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:223
-msgid "Remove the drive"
-msgstr ""
-
-#: rdp_launcher/ui/profile_dialog.py:229
-msgid "Choose a folder"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:43
-msgid "Connections"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:49
-msgid "No connections yet"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:50
-msgid ""
-"Create a profile and the launcher will start the official FreeRDP client."
-msgstr ""
-
-#: rdp_launcher/ui/window.py:52
-msgid "Create a connection"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:68 rdp_launcher/ui/window.py:294
-#: rdp_launcher/model.py:16 rdp_launcher/model.py:64
-msgid "New connection"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:73
-msgid "Import from .rdp…"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:74
-msgid "About"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:95 rdp_launcher/launcher.py:103
-msgid "FreeRDP client not found. Install the freerdp package."
-msgstr ""
-
-#: rdp_launcher/ui/window.py:101
-#, python-brace-format
-msgid ""
-"Only a deprecated client was found: {binary}. Install the freerdp package "
-"and use sdl-freerdp."
-msgstr ""
-
-#: rdp_launcher/ui/window.py:131
-msgid "Connect"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:136
-msgid "Edit"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:137
-msgid "Duplicate"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:138 rdp_launcher/ui/window.py:230
-msgid "Export to .rdp"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:139 rdp_launcher/ui/window.py:214
-msgid "Delete"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:147
-msgid "address not set"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:151
-msgid "full screen"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:153
-msgid "all monitors"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:155
-msgid "audio here"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:155
-msgid "audio on server"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:155
-msgid "no audio"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:158
-#, python-brace-format
-msgid "drives: {count}"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:164
-msgid "FreeRDP client not found"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:171
-#, python-brace-format
-msgid "Failed to start {binary}: {error}"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:173
-#, python-brace-format
-msgid "Started: {name} ({binary})"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:180
-#, python-brace-format
-msgid "Session “{name}” finished (exit code {code})"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:208
-msgid "Delete this connection?"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:209
-#, python-brace-format
-msgid "Profile “{name}” will be deleted together with its saved password."
-msgstr ""
-
-#: rdp_launcher/ui/window.py:246
-#, python-brace-format
-msgid "Saved: {path}"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:251
-msgid "Import .rdp"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:254
-msgid "RDP files"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:270
-#, python-brace-format
-msgid "Could not read the file: {error}"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:274
-#, python-brace-format
-msgid "Imported: {name}"
-msgstr ""
-
-#: rdp_launcher/ui/window.py:284
-msgid ""
-"A minimal front-end for the official FreeRDP client.\n"
-"The launcher does not render RDP itself: it starts sdl-freerdp as a separate "
-"process."
-msgstr ""
-
 #: rdp_launcher/launcher.py:29
 msgid "SDL3 (recommended)"
 msgstr ""
@@ -281,8 +37,17 @@ msgstr ""
 msgid "host address is not set"
 msgstr ""
 
+#: rdp_launcher/launcher.py:103 rdp_launcher/ui/window.py:95
+msgid "FreeRDP client not found. Install the freerdp package."
+msgstr ""
+
 #: rdp_launcher/launcher.py:106
 msgid " (deprecated)"
+msgstr ""
+
+#: rdp_launcher/model.py:16 rdp_launcher/model.py:64
+#: rdp_launcher/ui/window.py:68 rdp_launcher/ui/window.py:294
+msgid "New connection"
 msgstr ""
 
 #: rdp_launcher/options.py:23
@@ -524,4 +289,239 @@ msgstr ""
 
 #: rdp_launcher/rdpfile.py:78
 msgid "Imported connection"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:31 rdp_launcher/ui/profile_dialog.py:244
+msgid "Connection"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:48 rdp_launcher/ui/window.py:213
+msgid "Cancel"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:50
+msgid "Save"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:64
+msgid "General"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:65
+msgid "Address and credentials. The password is kept in the GNOME keyring."
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:68
+msgid "Name"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:72
+msgid "Address (host or IP)"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:77
+msgid "Port"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:81
+msgid "User name"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:85
+msgid "Domain"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:89
+msgid "Password"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:92
+msgid "A password is already saved — leave this field empty"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:96
+msgid "Keep the password in the keyring"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:97
+msgid "If disabled, the client asks for the password itself"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:103
+msgid "Hint"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:104
+msgid "Leave the password empty and the client will ask when connecting."
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:166
+msgid "A Linux directory appears as a drive in Windows"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:184
+msgid "Add a drive"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:201 rdp_launcher/ui/profile_dialog.py:209
+msgid "no folder selected"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:202
+msgid "Drive name in Windows"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:204
+msgid "Folder on this machine"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:216
+msgid "Choose a folder…"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:223
+msgid "Remove the drive"
+msgstr ""
+
+#: rdp_launcher/ui/profile_dialog.py:229
+msgid "Choose a folder"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:43
+msgid "Connections"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:49
+msgid "No connections yet"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:50
+msgid ""
+"Create a profile and the launcher will start the official FreeRDP client."
+msgstr ""
+
+#: rdp_launcher/ui/window.py:52
+msgid "Create a connection"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:73
+msgid "Import from .rdp…"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:74
+msgid "About"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:101
+#, python-brace-format
+msgid ""
+"Only a deprecated client was found: {binary}. Install the freerdp package "
+"and use sdl-freerdp."
+msgstr ""
+
+#: rdp_launcher/ui/window.py:131
+msgid "Connect"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:136
+msgid "Edit"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:137
+msgid "Duplicate"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:138 rdp_launcher/ui/window.py:230
+msgid "Export to .rdp"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:139 rdp_launcher/ui/window.py:214
+msgid "Delete"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:147
+msgid "address not set"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:151
+msgid "full screen"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:153
+msgid "all monitors"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:155
+msgid "audio here"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:155
+msgid "audio on server"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:155
+msgid "no audio"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:158
+#, python-brace-format
+msgid "drives: {count}"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:164
+msgid "FreeRDP client not found"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:171
+#, python-brace-format
+msgid "Failed to start {binary}: {error}"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:173
+#, python-brace-format
+msgid "Started: {name} ({binary})"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:180
+#, python-brace-format
+msgid "Session “{name}” finished (exit code {code})"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:208
+msgid "Delete this connection?"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:209
+#, python-brace-format
+msgid "Profile “{name}” will be deleted together with its saved password."
+msgstr ""
+
+#: rdp_launcher/ui/window.py:246
+#, python-brace-format
+msgid "Saved: {path}"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:251
+msgid "Import .rdp"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:254
+msgid "RDP files"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:270
+#, python-brace-format
+msgid "Could not read the file: {error}"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:274
+#, python-brace-format
+msgid "Imported: {name}"
+msgstr ""
+
+#: rdp_launcher/ui/window.py:284
+msgid ""
+"A minimal front-end for the official FreeRDP client.\n"
+"The launcher does not render RDP itself: it starts sdl-freerdp as a separate "
+"process."
 msgstr ""
