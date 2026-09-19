@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.rdplauncher.RdpLauncher</id>
+  <name>RDP Launcher</name>
+  <summary>Подключение к Windows по RDP</summary>
+  <summary xml:lang="en">Connect to Windows over RDP</summary>
+  <description>
+    <p>
+      Минимальный интерфейс к официальному клиенту FreeRDP: список профилей,
+      настройки экрана, звука и сетевых дисков, пароль в связке ключей GNOME.
+    </p>
+    <p xml:lang="en">
+      A minimal front-end for the official FreeRDP client: connection profiles,
+      display, audio and drive settings, passwords in the GNOME keyring.
+    </p>
+    <p>
+      Лаунчер не рисует RDP самостоятельно и не линкуется с libfreerdp — он запускает
+      sdl-freerdp отдельным процессом. Поэтому он не наследует класс ошибок,
+      свойственных GUI-обёрткам, встраивающим библиотеку.
+    </p>
+  </description>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <launchable type="desktop-id">io.github.rdplauncher.RdpLauncher.desktop</launchable>
+  <provides>
+    <binary>rdp-launcher</binary>
+    <mediatype>application/x-rdp</mediatype>
+  </provides>
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="0.1.0" date="2026-09-19">
+      <description><p>Первый выпуск.</p></description>
+    </release>
+  </releases>
+</component>

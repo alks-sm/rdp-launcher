@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+build/
+*.egg-info/
+# генерируется командой: xfreerdp --help > data/freerdp-help.txt
+data/freerdp-help.txt

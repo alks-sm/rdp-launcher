@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3584e4"/>
+      <stop offset="1" stop-color="#1c5fb8"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="26" fill="url(#bg)"/>
+  <!-- монитор -->
+  <rect x="26" y="30" width="76" height="50" rx="6" fill="#ffffff"/>
+  <rect x="32" y="36" width="64" height="38" rx="3" fill="#1a3d6b"/>
+  <!-- подставка -->
+  <rect x="54" y="82" width="20" height="7" rx="2" fill="#ffffff"/>
+  <rect x="44" y="89" width="40" height="6" rx="3" fill="#ffffff"/>
+  <!-- стрелка подключения внутри экрана -->
+  <path d="M46 55 h24 l-7 -7" fill="none" stroke="#7fd0ff" stroke-width="5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M70 55 l-7 7" fill="none" stroke="#7fd0ff" stroke-width="5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="82" cy="55" r="6" fill="#7fd0ff"/>
+</svg>

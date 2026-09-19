@@ -1,0 +1,303 @@
+"""Главное окно: список профилей и подключение."""
+from __future__ import annotations
+
+import threading
+from typing import Any
+
+import gi
+
+gi.require_version("Gtk", "4.0")
+gi.require_version("Adw", "1")
+
+from gi.repository import Adw, Gio, GLib, Gtk
+
+from .. import launcher, rdpfile
+from ..launcher import ClientSpec
+from ..model import Profile
+from ..secrets import SecretStore
+from ..storage import ProfileStore
+from .profile_dialog import ProfileDialog
+
+
+class MainWindow(Adw.ApplicationWindow):
+    def __init__(
+        self,
+        application: Adw.Application,
+        store: ProfileStore,
+        secrets: SecretStore,
+    ) -> None:
+        super().__init__(application=application, title="RDP Launcher", default_width=560, default_height=680)
+        self.store = store
+        self.secrets = secrets
+        self._clients = launcher.discover_clients()
+        self._client: tuple[ClientSpec, str] | None = self._clients[0] if self._clients else None
+
+        for name in ("edit", "duplicate", "export", "delete"):
+            action = Gio.SimpleAction.new(name, GLib.VariantType.new("s"))
+            action.connect("activate", getattr(self, f"_action_{name}"))
+            self.add_action(action)
+
+        self._toasts = Adw.ToastOverlay()
+        self._page = Adw.PreferencesPage()
+        self._group = Adw.PreferencesGroup(title="Подключения")
+        self._rows: list[Gtk.Widget] = []
+        self._page.add(self._group)
+
+        self._empty = Adw.StatusPage(
+            icon_name="network-server-symbolic",
+            title="Пока нет подключений",
+            description="Создайте профиль — лаунчер запустит официальный клиент FreeRDP.",
+        )
+        add_button = Gtk.Button(label="Создать подключение")
+        add_button.add_css_class("suggested-action")
+        add_button.add_css_class("pill")
+        add_button.set_halign(Gtk.Align.CENTER)
+        add_button.connect("clicked", lambda *_: self._new_profile())
+        self._empty.set_child(add_button)
+
+        self._stack = Gtk.Stack()
+        self._stack.add_named(self._empty, "empty")
+        self._stack.add_named(self._page, "list")
+        self._toasts.set_child(self._stack)
+
+        self._banner = Adw.Banner(revealed=False)
+
+        header = Adw.HeaderBar()
+        new_button = Gtk.Button(icon_name="list-add-symbolic")
+        new_button.set_tooltip_text("Новое подключение")
+        new_button.connect("clicked", lambda *_: self._new_profile())
+        header.pack_start(new_button)
+
+        menu = Gio.Menu()
+        menu.append("Импорт из .rdp…", "win.import")
+        menu.append("О программе", "win.about")
+        menu_button = Gtk.MenuButton(icon_name="open-menu-symbolic", menu_model=menu)
+        header.pack_end(menu_button)
+
+        for name, handler in (("import", self._import_rdp), ("about", self._about)):
+            action = Gio.SimpleAction.new(name, None)
+            action.connect("activate", handler)
+            self.add_action(action)
+
+        toolbar = Adw.ToolbarView()
+        toolbar.add_top_bar(header)
+        toolbar.add_top_bar(self._banner)
+        toolbar.set_content(self._toasts)
+        self.set_content(toolbar)
+
+        self._check_clients()
+        self.refresh()
+
+    # ------------------------------------------------------------------ клиент
+    def _check_clients(self) -> None:
+        if not self._clients:
+            self._banner.set_title("Клиент FreeRDP не найден. Установите пакет freerdp.")
+            self._banner.set_revealed(True)
+            return
+        spec, path = self._clients[0]
+        if spec.deprecated:
+            self._banner.set_title(
+                f"Найден только устаревший клиент {spec.binary}. Установите пакет freerdp "
+                "и используйте sdl-freerdp."
+            )
+            self._banner.set_revealed(True)
+        self._banner.set_tooltip_text(launcher.clients_report())
+
+    # ------------------------------------------------------------------- список
+    def refresh(self) -> None:
+        # Строки запоминаем сами: Adw.PreferencesGroup оборачивает их во внутренний
+        # контейнер, поэтому обход через get_first_child()/remove() не работает.
+        for row in self._rows:
+            self._group.remove(row)
+        self._rows.clear()
+
+        profiles = self.store.profiles
+        self._stack.set_visible_child_name("list" if profiles else "empty")
+        for profile in profiles:
+            row = self._profile_row(profile)
+            self._rows.append(row)
+            self._group.add(row)
+
+    def _profile_row(self, profile: Profile) -> Adw.ActionRow:
+        row = Adw.ActionRow(title=profile.name, subtitle=self._subtitle(profile))
+        row.set_activatable(True)
+        row.add_prefix(Gtk.Image.new_from_icon_name("computer-symbolic"))
+        row.connect("activated", lambda *_: self._connect(profile))
+
+        connect = Gtk.Button(icon_name="media-playback-start-symbolic", valign=Gtk.Align.CENTER)
+        connect.add_css_class("flat")
+        connect.set_tooltip_text("Подключиться")
+        connect.connect("clicked", lambda *_: self._connect(profile))
+        row.add_suffix(connect)
+
+        menu = Gio.Menu()
+        menu.append("Изменить", f"win.edit::{profile.id}")
+        menu.append("Дублировать", f"win.duplicate::{profile.id}")
+        menu.append("Экспорт в .rdp", f"win.export::{profile.id}")
+        menu.append("Удалить", f"win.delete::{profile.id}")
+        menu_button = Gtk.MenuButton(icon_name="view-more-symbolic", menu_model=menu)
+        menu_button.add_css_class("flat")
+        row.add_suffix(menu_button)
+        return row
+
+    def _subtitle(self, profile: Profile) -> str:
+        if not profile.host:
+            return "адрес не задан"
+        parts = [profile.login + "@" + profile.address if profile.login else profile.address]
+        values = profile.values
+        if values.get("fullscreen"):
+            parts.append("полный экран")
+        if values.get("multimon"):
+            parts.append("все мониторы")
+        audio = values.get("audio_mode")
+        parts.append({"redirect": "звук здесь", "server": "звук на сервере", "none": "без звука"}.get(audio, ""))
+        drives = values.get("drives") or ()
+        if drives:
+            parts.append(f"дисков: {len(drives)}")
+        return " · ".join(p for p in parts if p)
+
+    # -------------------------------------------------------------- подключение
+    def _connect(self, profile: Profile) -> None:
+        if self._client is None:
+            self._toast("Клиент FreeRDP не найден")
+            return
+        spec, path = self._client
+        password = self.secrets.lookup(profile.id)
+        try:
+            process = launcher.spawn(profile, path, password)
+        except Exception as exc:  # noqa: BLE001 — показываем пользователю любую ошибку запуска
+            self._toast(f"Не удалось запустить {spec.binary}: {exc}")
+            return
+        self._toast(f"Запущено: {profile.name} ({spec.binary})")
+        threading.Thread(target=self._watch, args=(process, profile.name), daemon=True).start()
+
+    def _watch(self, process: Any, name: str) -> None:
+        code = process.wait()
+        GLib.idle_add(self._toast, f"Сессия «{name}» завершена (код {code})")
+
+    def _toast(self, message: str) -> bool:
+        self._toasts.add_toast(Adw.Toast(title=message))
+        return False
+
+    # ----------------------------------------------------------------- действия
+    def _find(self, param: GLib.Variant) -> Profile | None:
+        return self.store.find(param.get_string())
+
+    def _action_edit(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        profile = self._find(param)
+        if profile is not None:
+            self._edit_profile(profile)
+
+    def _action_duplicate(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        profile = self._find(param)
+        if profile is not None:
+            self.store.add(profile.copy())
+            self.refresh()
+
+    def _action_delete(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        profile = self._find(param)
+        if profile is None:
+            return
+        dialog = Adw.MessageDialog(
+            transient_for=self,
+            heading="Удалить подключение?",
+            body=f"Профиль «{profile.name}» будет удалён вместе с сохранённым паролем.",
+        )
+        dialog.add_response("cancel", "Отмена")
+        dialog.add_response("delete", "Удалить")
+        dialog.set_response_appearance("delete", Adw.ResponseAppearance.DESTRUCTIVE)
+
+        def on_response(_dialog: Adw.MessageDialog, response: str) -> None:
+            if response == "delete":
+                self.secrets.clear(profile.id)
+                self.store.remove(profile.id)
+                self.refresh()
+
+        dialog.connect("response", on_response)
+        dialog.present()
+
+    def _action_export(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        profile = self._find(param)
+        if profile is None:
+            return
+        dialog = Gtk.FileDialog(title="Экспорт в .rdp", initial_name=f"{profile.name}.rdp")
+
+        def done(source: Gtk.FileDialog, result: Any) -> None:
+            try:
+                target = source.save_finish(result)
+            except Exception:
+                return
+            if target is None:
+                return
+            path = target.get_path()
+            if not path:
+                return
+            if not path.endswith(".rdp"):
+                path += ".rdp"
+            with open(path, "w", encoding="utf-8") as handle:
+                handle.write(rdpfile.to_rdp_text(profile))
+            self._toast(f"Сохранено: {path}")
+
+        dialog.save(parent=self, callback=done)
+
+    def _import_rdp(self, *_args: Any) -> None:
+        dialog = Gtk.FileDialog(title="Импорт .rdp")
+        filters = Gio.ListStore.new(Gtk.FileFilter)
+        file_filter = Gtk.FileFilter()
+        file_filter.set_name("Файлы RDP")
+        file_filter.add_pattern("*.rdp")
+        filters.append(file_filter)
+        dialog.set_filters(filters)
+
+        def done(source: Gtk.FileDialog, result: Any) -> None:
+            try:
+                target = source.open_finish(result)
+            except Exception:
+                return
+            if target is None or not target.get_path():
+                return
+            try:
+                text = open(target.get_path(), encoding="utf-8", errors="replace").read()
+                profile = rdpfile.parse_rdp_text(text)
+            except OSError as exc:
+                self._toast(f"Не удалось прочитать файл: {exc}")
+                return
+            self.store.add(profile)
+            self.refresh()
+            self._toast(f"Импортировано: {profile.name}")
+
+        dialog.open(parent=self, callback=done)
+
+    def _about(self, *_args: Any) -> None:
+        dialog = Adw.AboutDialog(
+            application_name="RDP Launcher",
+            application_icon="io.github.rdplauncher.RdpLauncher",
+            version="0.1.0",
+            comments="Минимальный интерфейс к официальному клиенту FreeRDP.\n"
+            "Лаунчер не рисует RDP сам — он запускает sdl-freerdp отдельным процессом.",
+            developers=["Собрано вместе с DSH"],
+        )
+        dialog.set_debug_info(launcher.clients_report())
+        dialog.present(self)
+
+    # -------------------------------------------------------------- профили
+    def _new_profile(self) -> None:
+        profile = Profile(name="Новое подключение", host="")
+        self._edit_profile(profile, is_new=True)
+
+    def _edit_profile(self, profile: Profile, is_new: bool = False) -> None:
+        has_password = bool(self.secrets.lookup(profile.id))
+
+        def on_save(updated: Profile, typed_password: str | None, remember: bool) -> None:
+            if typed_password:
+                self.secrets.store(updated.id, typed_password)
+            elif not remember:
+                self.secrets.clear(updated.id)
+            if is_new:
+                self.store.add(updated)
+            else:
+                self.store.upsert(updated)
+            self.refresh()
+
+        dialog = ProfileDialog(profile, has_password, on_save)
+        dialog.present(self)

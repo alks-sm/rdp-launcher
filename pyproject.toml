@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rdp-launcher"
+version = "0.1.0"
+description = "Минимальный интерфейс к официальному клиенту FreeRDP"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+# Единственная внешняя зависимость — PyGObject, и тот уже есть в Fedora
+# в составе python3-gobject + gtk4 + libadwaita.
+dependencies = []
+
+[project.optional-dependencies]
+dev = []
+
+[project.gui-scripts]
+rdp-launcher = "rdp_launcher.app:main"
+
+[tool.setuptools]
+packages = ["rdp_launcher", "rdp_launcher.ui"]

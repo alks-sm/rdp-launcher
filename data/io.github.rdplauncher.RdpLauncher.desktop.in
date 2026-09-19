@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=RDP Launcher
+Name[ru]=RDP Launcher
+Comment=Подключение к Windows по RDP
+Comment[en]=Connect to Windows over RDP
+Exec=@EXEC@
+Icon=@ICON@
+Terminal=false
+Categories=Network;RemoteAccess;
+Keywords=RDP;Remote Desktop;Windows;FreeRDP;
+StartupNotify=true
+StartupWMClass=io.github.rdplauncher.RdpLauncher
+MimeType=application/x-rdp;
