@@ -15,9 +15,13 @@ jobs:
 
       - name: Установить зависимости
         run: |
+          # gobject-introspection нужен для cairo-1.0.typelib: без него GTK
+          # не стартует с GSK_RENDERER=cairo в контейнере.
           dnf install -y --setopt=install_weak_deps=False \
             freerdp \
             python3-gobject \
+            gobject-introspection \
+            cairo-gobject \
             gtk4 \
             libadwaita \
             libsecret \
