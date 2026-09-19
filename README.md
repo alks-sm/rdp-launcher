@@ -16,6 +16,15 @@
 > adding a language means one `.po` file and `tools/build-locales.sh`.
 > See [`docs/research.md`](docs/research.md) for the reasoning and the measurements behind it.
 
+## Как это выглядит
+
+![Список подключений](docs/screenshots/main-window.png)
+
+![Настройки профиля](docs/screenshots/profile-dialog.png)
+
+> Скриншоты сгенерированы из самого приложения командой
+> `GSK_RENDERER=cairo python3 tools/make-screenshots.py`, а не сняты вручную.
+
 ## Зачем именно так
 
 Разбор существующего софта (подробности — в [`docs/research.md`](docs/research.md)) показал,
@@ -62,6 +71,18 @@ sudo dnf install freerdp python3-gobject gtk4 libadwaita libsecret
 
 ```bash
 PYTHONPATH=$PWD python3 -m rdp_launcher
+```
+
+### Пакет RPM / COPR
+
+Для Fedora есть спецификация и CI-задача, которая собирает пакет на каждой сборке:
+[`packaging/`](packaging/) (`rpmbuild -ba packaging/rdp-launcher.spec`).
+Пошаговая инструкция по публикации в COPR — в
+[`packaging/README.md`](packaging/README.md).
+
+```bash
+sudo dnf copr enable alks-sm/rdp-launcher   # после публикации в COPR
+sudo dnf install rdp-launcher
 ```
 
 ## Что в интерфейсе
