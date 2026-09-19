@@ -22,20 +22,20 @@ jobs:
             libadwaita \
             libsecret \
             gettext \
-            git \
             xorg-x11-server-Xvfb
 
-      - name: Синтаксис и сборка переводов
+      - name: Синтаксис и компиляция переводов
         run: |
           python3 -m compileall -q rdp_launcher
-          ./tools/build-locales.sh
+          ./tools/build-locales.sh --compile-only
           msgfmt --check po/ru.po
 
       - name: Шаблон переводов актуален
         run: |
-          # Сравниваем именно ЗАКОММИЧЕННУЮ версию со свежесгенерированной
-          # (строка POT-Creation-Date меняется при каждой генерации).
-          git show HEAD:po/rdp-launcher.pot > /tmp/committed.pot
+          # Сравниваем ЗАКОММИЧЕННУЮ версию шаблона со свежесгенерированной
+          # (строка POT-Creation-Date меняется при каждой генерации,
+          #  поэтому она исключена из сравнения).
+          cp po/rdp-launcher.pot /tmp/committed.pot
           ./tools/build-locales.sh >/dev/null
           grep -v '^"POT-Creation-Date' /tmp/committed.pot > /tmp/committed.clean
           grep -v '^"POT-Creation-Date' po/rdp-launcher.pot > /tmp/fresh.clean
