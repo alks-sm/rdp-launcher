@@ -32,18 +32,33 @@ jobs:
 
       - name: Шаблон переводов актуален
         run: |
-          # Сравниваем ЗАКОММИЧЕННУЮ версию шаблона со свежесгенерированной
-          # (строка POT-Creation-Date меняется при каждой генерации,
-          #  поэтому она исключена из сравнения).
+          # Сравниваем набор msgid, а не файл целиком: заголовок шаблона
+          # (POT-Creation-Date и прочее) зависит от версии gettext, а нам важно,
+          # что в шаблоне ровно те строки, которые есть в коде.
           cp po/rdp-launcher.pot /tmp/committed.pot
           ./tools/build-locales.sh >/dev/null
-          grep -v '^"POT-Creation-Date' /tmp/committed.pot > /tmp/committed.clean
-          grep -v '^"POT-Creation-Date' po/rdp-launcher.pot > /tmp/fresh.clean
-          if ! cmp -s /tmp/committed.clean /tmp/fresh.clean; then
-            echo "::error::po/rdp-launcher.pot устарел. Запустите ./tools/build-locales.sh --update и закоммитьте результат."
-            exit 1
-          fi
-          echo "шаблон актуален"
+          python3 - <<'PY'
+          import pathlib
+          import sys
+
+          def msgids(path: str) -> list[str]:
+              return sorted(
+                  line for line in pathlib.Path(path).read_text(encoding="utf-8").splitlines()
+                  if line.startswith("msgid ")
+              )
+
+          committed = msgids("/tmp/committed.pot")
+          fresh = msgids("po/rdp-launcher.pot")
+          if committed != fresh:
+              only_committed = [m for m in committed if m not in fresh]
+              only_fresh = [m for m in fresh if m not in committed]
+              print("::error::po/rdp-launcher.pot устарел. Запустите ./tools/build-locales.sh --update и закоммитьте результат.")
+              for title, items in (("только в шаблоне", only_committed), ("только в коде", only_fresh)):
+                  for item in items[:10]:
+                      print(f"{title}: {item}")
+              sys.exit(1)
+          print(f"шаблон актуален ({len(fresh)} строк)")
+          PY
 
       - name: Тесты логики
         run: python3 tests/test_core.py -v
