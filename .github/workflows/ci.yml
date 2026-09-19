@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     container: fedora:44
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Установить зависимости
         run: |
@@ -30,12 +30,19 @@ jobs:
           ./tools/build-locales.sh
           msgfmt --check po/ru.po
 
-      - name: Каталог переводов актуален
+      - name: Шаблон переводов актуален
         run: |
-          # шаблон должен пересобираться без изменений — иначе забыли прогнать build-locales.sh
-          cp po/rdp-launcher.pot /tmp/before.pot
+          # Закоммиченный .pot должен совпадать со свежесгенерированным
+          # (строка POT-Creation-Date меняется при каждой генерации).
+          cp po/rdp-launcher.pot /tmp/committed.pot
           ./tools/build-locales.sh >/dev/null
-          diff -u /tmp/before.pot po/rdp-launcher.pot
+          grep -v '^"POT-Creation-Date' /tmp/committed.pot > /tmp/committed.clean
+          grep -v '^"POT-Creation-Date' po/rdp-launcher.pot > /tmp/fresh.clean
+          if ! cmp -s /tmp/committed.clean /tmp/fresh.clean; then
+            echo "::error::po/rdp-launcher.pot устарел. Запустите ./tools/build-locales.sh --update и закоммитьте результат."
+            exit 1
+          fi
+          echo "шаблон актуален"
 
       - name: Тесты логики
         run: python3 tests/test_core.py -v
